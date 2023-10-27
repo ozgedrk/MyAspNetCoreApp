@@ -1,0 +1,131 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@* 
+@section Css{
+    <style>
+
+
+    </style>
+
+}
+
+
+
+@section Scripts
+    {
+
+
+    } *@
+
+<div class="row">
+
+    <div class="col-md-5">
+
+        <partial name="~/PartialViews/_ProductListPartialView.cshtml"
+                 model="@ViewBag.productListPartialViewModel" />
+    </div>
+
+    <div class="col-md-5">
+        @*         @await Component.InvokeAsync("ProductList",new{type=1}) *@
+
+        <vc:product-list type=" 1"></vc:product-list>
+
+    </div>
+
+    <div class="col-md-2">
+
+        <italic>ASP .Net Core</italic>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
+<partial name="_MenuPartialView" />
+@await Html.PartialAsync("_MenuPartialView") *@
+
+
+
+@*
+
+<div>Gunun Tarihi : @DateTime.Now.ToShortDateString()</div>
+@{
+    var datetime = DateTime.Now.ToShortDateString();
+    var message = "Merhaba";
+
+    @: Bugunun tarihi : @datetime
+    <div> mesaj : @message</div>
+    <text>Bugunun tarihi : @datetime</text>
+
+}
+@if (1 == 1)
+{
+    <p>dogru</p>
+}
+else if (DateTime.IsLeapYear(DateTime.Now.Year))
+{
+    <p>artik yil</p>
+}
+else
+{
+    <h1>@alert</h1>
+    <p>yanlis</p>
+}
+
+@for (var i = 0; i < 10; i++)
+{
+    <p>@i</p>
+}
+
+<hr/>
+
+@foreach(var item in Enumerable.Range(1,10).ToList() )
+{
+    <p>@item</p>
+} *@

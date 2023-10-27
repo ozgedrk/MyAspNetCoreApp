@@ -1,0 +1,81 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Ornek Controller,Index sayfasi</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* 
+@{
+    var name = ViewBag.name;
+    <p>@name</p>
+}
+<p>@name</p>
+
+<p>@ViewBag.name</p>
+
+<hr />
+
+<p> Yas : @ViewData["age"]</p>
+
+<h1>Isimler</h1>
+
+@foreach (var item in ViewData["names"] as List<string>)
+{
+    <p> @item</p>
+
+}
+
+<p>
+    @ViewBag.person.Id - @ViewBag.person.name - @ViewBag.person.age
+</p>
+ *@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @foreach (int item in ViewBag.name)
+{
+    return List<>
+} *@
