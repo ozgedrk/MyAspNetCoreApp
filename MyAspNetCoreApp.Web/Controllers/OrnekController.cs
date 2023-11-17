@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyAspNetCoreApp.Web.Filters;
 
 namespace MyAspNetCoreApp.Web.Controllers
 {
+    [CustomResultFilter("x-version", "2.0")]
     public class OrnekController : Controller
     {
         public IActionResult Index()
@@ -21,7 +23,7 @@ namespace MyAspNetCoreApp.Web.Controllers
 
         public IActionResult Index2()
         {
-            
+
             var surName = TempData["surname"];
 
             return View();

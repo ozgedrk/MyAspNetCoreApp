@@ -42,5 +42,6 @@ namespace MyAspNetCoreApp.Web.ViewModel
 
         public bool IsPublish { get; set; }
         public bool IsDeleted { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

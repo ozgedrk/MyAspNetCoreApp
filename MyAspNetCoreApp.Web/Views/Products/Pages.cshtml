@@ -1,17 +1,13 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Pages";
 }
 @model List<ProductViewModel>
-<h1>Urunler</h1>
+<h1>Pages</h1>
+<h2>page : @ViewBag.page</h2>
+<h2>page size : @ViewBag.pageSize</h2>
 
-@if (TempData["status"] != null)
-{
-    <div class="alert alert-info" role="alert">
-        @TempData["status"]
-    </div>
-}
-<table class="table table-danger  table-bordered  table-hover">
-    <a class="btn btn-primary mb-2 " asp-controller="products" asp-action="add">Urun ekle</a>
+<table class="table">
+      <a class="btn btn-primary mb-2 " asp-controller="products" asp-action="add">Urun ekle</a>
     <thead>
         <tr>
             <th>Id</th>
@@ -60,13 +56,14 @@
                 </td>
                 <td>
 
-                    <a class="btn btn-primary mb-2 " asp-controller="products" asp-action="remove" asp-route-id="@item.Id">Sil</a>
-                    <a class="btn btn-primary mb-2" asp-controller="products" asp-action="update" asp-route-id="@item.Id">Guncelle</a>
+                    <a class="btn btn-primary mb-2 " asp-controller="products" asp-action="remove" asp-route-productid="@item.Id">Sil</a>
+                    <a class="btn btn-primary mb-2" asp-controller="products" asp-action="update" asp-route-productid="@item.Id">Guncelle</a>
                     <a class="btn btn-primary mb-2" asp-controller="products" asp-action="getbyid" asp-route-productid="@item.Id">Urun icerik sayfasina git</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-<a class="btn btn-primary mb-2 " asp-controller="products" asp-action="pages" asp-route-page=1 asp-route-pagesize=3>1. sayfadan 3 urun ver</a>
-<a class="btn btn-primary mb-2 " asp-controller="products" asp-action="pages" asp-route-page=2 asp-route-pagesize=3>2. sayfadan 3 urun ver</a>
+
+<a class="btn btn-primary mb-3" asp-controller="products" asp-action="index">Urunler sayfasina git</a>
+   
