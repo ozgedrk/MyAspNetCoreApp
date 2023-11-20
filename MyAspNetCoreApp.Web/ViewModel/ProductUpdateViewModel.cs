@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyAspNetCoreApp.Web.ViewModel
 {
-    public class ProductViewModel
+    public class ProductUpdateViewModel
     {
         public int Id { get; set; }
 
-        [Remote(action: "HasProductName", controller: "Products")]
         [StringLength(50, ErrorMessage = "Name could be max 50 character.")]
         [Required(ErrorMessage = "Namespace must be filled.")]
         public string? Name { get; set; }

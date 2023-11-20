@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using MyAspNetCoreApp.Web.Filters;
 using MyAspNetCoreApp.Web.Helpers;
@@ -50,11 +51,28 @@ namespace MyAspNetCoreApp.Web.Controllers
 
         public IActionResult Index()
         {
-            var text = "Asp.Net";
+            List<ProductViewModel> products = _context.Products
+       .Where(x => !x.IsDeleted)
+       .Include(x => x.Category)
+       .Select(x => new ProductViewModel
+       {
+           Id = x.Id,
+           Name = x.Name,
+           Price = x.Price,
+           Stock = x.Stock,
+           CategoryName = x.Category.Name,
+           Color = x.Color,
+           Description = x.Description,
+           Expire = x.Expire,
+           IsPublish = x.IsPublish,
+           PublishDate = x.PublishDate,
+           IsDeleted = x.IsDeleted
+       })
+       .ToList();
 
 
-            var products = _context.Products.Where(x => !x.IsDeleted).ToList();
-            return View(_mapper.Map<List<ProductViewModel>>(products));
+            //var products = _context.Products.Where(x => !x.IsDeleted).ToList();
+            return View(products);
         }
 
         [Route("[controller]/[action]/{page}/{pagesize}")]
@@ -126,9 +144,12 @@ namespace MyAspNetCoreApp.Web.Controllers
             new () {Data="Sari" ,Value="Sari"}
             }, "Value", "Data");
 
+            var categories = _context.Category.ToList();
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
 
             return View();
         }
+
 
         [HttpPost]
         public IActionResult Add(ProductViewModel newProduct)
@@ -139,36 +160,11 @@ namespace MyAspNetCoreApp.Web.Controllers
             {
                 try
                 {
+                    _context.Products.Add(_mapper.Map<Product>(newProduct));
+                    _context.SaveChanges();
+                    TempData["status"] = "Urun basariyla eklendi. ";
 
-                    var root = _fileProvider.GetDirectoryContents("wwwroot");
-
-                    var images = root.FirstOrDefault(x => x.Name == "images");
-
-                    if (images != null)
-                    {
-                        var path = Path.Combine(images.PhysicalPath, newProduct.Image.FileName);
-
-                        using var stream = new FileStream(path, FileMode.Create);
-
-                        newProduct.Image.CopyTo(stream);
-
-
-                        var product = _mapper.Map<Product>(newProduct);
-                        product.ImagePath = newProduct.Image.FileName;
-
-
-                        _context.Products.Add(product);
-                        _context.SaveChanges();
-                        TempData["status"] = "Urun basariyla eklendi. ";
-
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        TempData["status"] = "Error: 'images' directory not found.";
-                        result = View();
-                    }
-
+                    return RedirectToAction("Index");
                 }
                 catch (Exception)
                 {
@@ -179,29 +175,37 @@ namespace MyAspNetCoreApp.Web.Controllers
             {
                 result = View();
             }
-
             ViewBag.Expire = new Dictionary<string, int>()
-            {
-                  {"1 Ay" ,1 },
-                  {"3 Ay" ,3 },
-                  {"6 Ay" ,6 },
-                  {"12 Ay" ,12 }
-            };
+        {
+              {"1 Ay" ,1 },
+              {"3 Ay" ,3 },
+              {"6 Ay" ,6 },
+              {"12 Ay" ,12 }
+        };
+
             ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>() {
 
-            new () {Data="Mavi" ,Value="Mavi"},
-            new () {Data="Kirmizi" ,Value="Kirmizi"},
-            new () {Data="Sari" ,Value="Sari"}
-            }, "Value", "Data");
+        new () {Data="Mavi" ,Value="Mavi"},
+        new () {Data="Kirmizi" ,Value="Kirmizi"},
+        new () {Data="Sari" ,Value="Sari"}
+        }, "Value", "Data");
 
-            return result;
+            var categories = _context.Category.ToList();
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
+
+            return View();
         }
 
         [ServiceFilter(typeof(NotFoundFilter))]
         [HttpGet]
         public IActionResult Update(int id)
         {
+
             var product = _context.Products.Find(id);
+
+            var categories = _context.Category.ToList();
+            ViewBag.categorySelect = new SelectList(categories, "Id", "Name");
+
 
             ViewBag.ExpireValue = product.Expire;
             ViewBag.Expire = new Dictionary<string, int>()
@@ -219,10 +223,10 @@ namespace MyAspNetCoreApp.Web.Controllers
             new () {Data="Sari" ,Value="Sari"}
             }, "Value", "Data", product.Color);
 
-            return View(_mapper.Map<ProductViewModel>(product));
+            return View(_mapper.Map<ProductUpdateViewModel>(product));
         }
         [HttpPost]
-        public IActionResult Update(ProductViewModel updateProduct)
+        public IActionResult Update(ProductUpdateViewModel updateProduct)
         {
 
             if (!ModelState.IsValid)
@@ -241,12 +245,22 @@ namespace MyAspNetCoreApp.Web.Controllers
                    new () {Data="Mavi" ,Value="Mavi"},
                    new () {Data="Kirmizi" ,Value="Kirmizi"},
                    new () {Data="Sari" ,Value="Sari"}
+
                  }, "Value", "Data", updateProduct.Color);
+
+                var categories = _context.Category.ToList();
+                ViewBag.categorySelect = new SelectList(categories, "Id", "Name", updateProduct.CategoryId);
+
 
                 return View();
             }
-            _context.Products.Update(_mapper.Map<Product>(updateProduct));
-            _context.SaveChanges();
+
+            var product = _mapper.Map<Product>(updateProduct);
+            if (updateProduct.CategoryName != null)
+            {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+            }
 
             TempData["status"] = "Urun basariyla guncellendi. ";
 

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Update";
 }
-@model ProductViewModel
+@model ProductUpdateViewModel
 
 <h1>Urun Guncelleme</h1>
 
@@ -9,6 +9,7 @@
 
 
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CategoryId" />
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Prroduct Name :</label>
         <input class="form-control" asp-for="Name">
@@ -80,6 +81,13 @@
         <label asp-for="PublishDate" class="form-label">Prroduct Publish Date :</label>
         <input class="form-control" asp-for="PublishDate">
         <span class="text-danger" asp-validation-for="PublishDate"></span>
+    </div>
+
+    <div class="mb-3">
+        <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.categorySelect">
+            <option value="">Choose a category</option>
+        </select>
+        <span class="text-danger" asp-validation-for="CategoryId"></span>
     </div>
 
     <button type="submit" class="btn btn-info">Urun Guncelle</button>

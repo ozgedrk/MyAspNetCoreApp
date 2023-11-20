@@ -1,4 +1,6 @@
-﻿namespace MyAspNetCoreApp.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MyAspNetCoreApp.Web.Models
 {
     public class Product
     {
@@ -9,10 +11,17 @@
         public string? Color { get; set; }
         public bool IsDeleted { get; set; }
         public string Description { get; set; }
-        public DateTime? PublishDate { get; set; }   
+        public DateTime? PublishDate { get; set; }
         public int Expire { get; set; }
         public bool IsPublish { get; set; }
-        public string ImagePath { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+
+
+
+        //[Required(ErrorMessage = "Image field is required.")]
+        //public string ImagePath { get; set; }
 
     }
 }

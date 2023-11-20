@@ -76,9 +76,18 @@
         <span class="text-danger" asp-validation-for="PublishDate"></span>
 
     </div>
+
+
+    @*  <div class="mb-3">
+    <label for="formFileLg" class="form-label">Urun Resim</label>
+    <input class="form-control form-control-lg" asp-for="Image" type="file">
+    </div> *@
+
     <div class="mb-3">
-        <label for="formFileLg" class="form-label">Urun Resim</label>
-        <input class="form-control form-control-lg" asp-for="Image" type="file">
+        <select class="form-select" asp-for="CategoryId" asp-items="@ViewBag.categorySelect">
+            <option value="">Choose a category</option>
+        </select>
+        <span class="text-danger" asp-validation-for="CategoryId"></span>
     </div>
     <button type="submit" class="btn btn-info">Urun Kaydet</button>
 </form>
